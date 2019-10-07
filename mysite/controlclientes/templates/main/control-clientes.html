@@ -78,9 +78,9 @@ input{width:50% !important;display:inline-block !important;}
 	</div>
 	<div class="col-md-3">
 		<div class="barraiz">
-			<ul onclick="CambioBase('Usuarios')">Usuarios</ul>
-			<ul onclick="CambioBase('Mapas')">Mapas</ul>
-			<ul onclick="CambioBase('Objetos')">Objetos</ul>
+			<ul onclick="CambioBase('users')">Usuarios</ul>
+			<ul onclick="CambioBase('maps')">Mapas</ul>
+			<ul onclick="CambioBase('objects')">Objetos</ul>
 		</div>
 	</div>
 	<div class="col-md-9 row">
@@ -89,11 +89,11 @@ input{width:50% !important;display:inline-block !important;}
 		<table class="table" id="tabla">
 			<thead>
 				<tr>
-					<th>Nombre</th>
-					<th>Apellido</th>
-					<th>Mail</th>
-					<th>Dinero</th>
-					<th>Editor</th>
+					<th id="label1">Usuario</th>
+					<th id="label2">Nombre</th>
+					<th id="label3">Mail</th>
+					<th id="label4">Dinero</th>
+					<th id="label5">Editor</th>
 				</tr>
 			</thead>
 			<tbody id="bodytable">
@@ -107,18 +107,74 @@ input{width:50% !important;display:inline-block !important;}
 <script>
 function CambioBase(text){
 	var elemento = document.getElementById("quemiramos");
-	elemento.innerHTML=text;
+	var newRows = "";
 	
-	$.get('clientes.json', function(html){
-		alert(html);
-		for(i = 0; i < html.length; i++) { 
-			newRows += "<tr><td>" + html[i].name + "</td><td>" + html[i].description + "</td><td>" + html[i].stargazers_count + "</td></tr>";
-		}
-		$('#tabla tr').first().after(newRows);
+	$("td:first-child").each(function(){
+		$(this).parents("tr").hide();
 	});
+	
+	if (text == "users"){
+		document.getElementById("quemiramos").innerHTML="Usuarios";
+		document.getElementById("label1").innerHTML ="Username";
+		document.getElementById("label2").innerHTML ="Nombre";
+		document.getElementById("label3").innerHTML ="Mail";
+		document.getElementById("label4").innerHTML ="Dinero";
+		
+		$.getJSON(text+'.json', function(html){
+			for(i = 0; i < html.length; i++) { 
+				newRows += "<tr><td>" + html[i].username + "</td><td>" + html[i].name + "</td><td>" + html[i].email + "</td><td>" + html[i].money + "</td></tr>";
+			}
+			$('#tabla tr').first().after(newRows);
+		});
+	}
+	else if (text == "maps"){		
+		elemento.innerHTML="Mapas";
+		document.getElementById("label1").innerHTML ="Nombre";
+		document.getElementById("label2").innerHTML ="Creado";
+		document.getElementById("label3").innerHTML ="Medidas";
+		document.getElementById("label4").innerHTML ="Dificultad";
+		
+		$.getJSON(text+'.json', function(html){
+			for(i = 0; i < html.length; i++) { 
+				newRows += "<tr><td>" + html[i].name + "</td><td>" + html[i].created + "</td><td>" + html[i].size + "</td><td>" + html[i].diff + "</td></tr>";
+			}
+			$('#tabla tr').first().after(newRows);
+		});
+	}
+	else if (text == "objects"){
+		elemento.innerHTML="Objetos";
+		document.getElementById("label1").innerHTML ="Nombre";
+		document.getElementById("label2").innerHTML ="Propiedad";
+		document.getElementById("label3").innerHTML ="Valor";
+		document.getElementById("label4").innerHTML ="Precio";
+		
+		$.getJSON(text+'.json', function(html){
+			for(i = 0; i < html.length; i++) { 
+				newRows += "<tr><td>" + html[i].name + "</td><td>" + html[i].property + "</td><td>" + html[i].value + "</td><td>" + html[i].price + "</td></tr>";
+			}
+			$('#tabla tr').first().after(newRows);
+		});	
+	}
+
 }
 
 $(document).ready(function() { 
+		var newRows = "";
+		
+		document.getElementById("quemiramos").innerHTML="Usuarios";
+		document.getElementById("label1").innerHTML ="Username";
+		document.getElementById("label2").innerHTML ="Nombre";
+		document.getElementById("label3").innerHTML ="Mail";
+		document.getElementById("label4").innerHTML ="Dinero";
+		
+		$.getJSON('users.json', function(html){
+			for(i = 0; i < html.length; i++) { 
+				newRows += "<tr><td>" + html[i].username + "</td><td>" + html[i].name + "</td><td>" + html[i].email + "</td><td>" + html[i].money + "</td></tr>";
+			}
+			$('#tabla tr').first().after(newRows);
+		});
+		
+
 		$("#boton").click(function() { 
 		var nombre = $("#usuario").val();
 		$("td:first-child").each(function(){

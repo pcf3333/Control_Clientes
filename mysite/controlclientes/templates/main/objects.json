@@ -1,0 +1,8 @@
+[
+	{
+			"name":"Shield",
+			"property": "HP",
+			"value":1000,
+			"price": 250
+	}
+]
